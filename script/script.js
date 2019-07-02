@@ -1,50 +1,65 @@
 const puppeteer = require('puppeteer');
-let url = 'https://research.demo.cch.com/DailiesBrowser/home?date=03%2F05%2F2019&ids=eld013e9474187d4b10008ffb00505688259002,eld013e9474227d4b1000a19c00505688259004,eld013e9474227d4b1000a84a00505688259005,eld013e9474227d4b10008ebc00505688259006,eld013e9474227d4b100093f300505688259007,eld013e94742c7d4b1000a59200505688259008,eld013e94742c7d4b1000ae7300505688259009,eld013e94742c7d4b10008a6f0050568825900a,eld013e94742c7d4b1000bd2f0050568825900c,eld013e9474367d4b1000adbe0050568825900d,eld013e9474367d4b1000bb450050568825900e,eld013e9474367d4b10009f1e0050568825900f';
-const DEFAULT_TIMEOUT = 1000 * 30;
+const helper = require('../helper/helper.js');
+const perf = require('execution-time')();
+const testsConfig = require('../config/tests.config');
+const browserConfig = require('../config/browser.config');
+const DEFAULT_TIMEOUT = (browserConfig.timeout) ? browserConfig.timeout : 5000;
+let url = browserConfig.url;
 
-  async function openWindow(i, headless) {
-      console.log('called openWindow', i, headless);
+  async function openWindow(i) {
+      console.log('called openWindow', i);
     let browser, page, user;
 
     try {
       browser = await puppeteer.launch(
         {
-          headless: JSON.parse(headless),
-          args: [
-            '--window-size=1354,894'
-          ],
-          slowMo: 0
+          headless: JSON.parse(testsConfig.headless),
+          args: browserConfig.puppeteerArgs,
         }
       );
 
       page = await browser.newPage();
-      await page.setViewport( { width: 1338, height: 768 } );
+      await page.setViewport(browserConfig.viewport);
       page.setDefaultTimeout(DEFAULT_TIMEOUT);
 
+      perf.start();
       await page.goto(url);
-      // await page.waitFor('div.product-name');
-      // let title = getText TODO
-      let title = 'asdfasdfasdf';
+
+      let title = await helper.getText(page, 'div.product-name');
+      await page.waitForSelector('div.topics-column');
+      // await page.waitForFunction("document.querySelector('div.topics-column') && document.querySelector('div.topics-column').clientHeight != 0");
+      await page.waitForFunction("document.querySelector('div.topic') && document.querySelector('div.topic').clientHeight != 0");
+      
+      const time = perf.stop();
+      console.log('took time:', time.words);
+
+        // screen
+      const stamp = helper.getTime();
+      const screenPath = await helper.saveScreenshot(page, testsConfig.screenshotsPath, `${i}_${stamp}`, i);
 
       await browser.close();
       console.log(`browser closed: ${i}`);
 
       return {
         titleText: title,
-        index: i
+        index: i,
+        screenshot: screenPath,
+        time: time.words
       };
       
     } catch (e) {
       console.log('\nErRoR\n:', e);
+      const stamp = helper.getTime();
+      const screenPath = await helper.saveScreenshot(page, testsConfig.screenshotsPath, `${i}_${stamp}`, i);
       await browser.close();
+
       return {
         error: e,
-        index: i
+        index: i,
+        screenshot: screenPath
       };
     }
 
   };
-
-
 
   module.exports = { openWindow }

@@ -5,7 +5,7 @@ const OUTPUT_DIR = './output';
 const OPTS_PATH = './test/mocha.opts';
 const CONFIG_PATH = './config/tests.config.json';
 
-const instances = (args.instances) ? args.instances : 5;
+const instances = (args.instances) ? args.instances : 25;
 const headless = (args.headless) ? args.headless : false;
 
 console.log('args:', args);
