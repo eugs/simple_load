@@ -1,10 +1,8 @@
 {
-  "timeout" : 15000,
+  "timeout" : 20000,
   "puppeteerArgs": ["--window-size=1354,894"],
   "viewport": { 
     "width": 1338, 
     "height": 768 
-  },
-  "url": ""
- 
+  }
 }

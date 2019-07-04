@@ -1,10 +1,12 @@
 const puppeteer = require('puppeteer');
 const helper = require('../helper/helper.js');
 const perf = require('execution-time')();
-const testsConfig = require('../config/tests.config');
+const testsConfig = require('../temp/tests.config');
 const browserConfig = require('../config/browser.config');
-const DEFAULT_TIMEOUT = (browserConfig.timeout) ? browserConfig.timeout : 5000;
-let url = browserConfig.url;
+// const DEFAULT_TIMEOUT = (browserConfig.timeout) ? browserConfig.timeout : 5000;
+const DEFAULT_TIMEOUT = (testsConfig.waitTime) ? testsConfig.waitTime : 5000;
+
+let url = testsConfig.url;
 
   async function openWindow(i) {
       console.log('called openWindow', i);

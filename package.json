@@ -4,13 +4,15 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "node index.js --headless false && mocha",
-    "test:headless": "node index.js --headless true && mocha"
+    "test": "gulp test --headless true --instances 25 --timeout 30000 --env dev"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "chai": "^4.2.0",
+    "gulp": "^4.0.2",
+    "gulp-mocha": "^6.0.0",
+    "lodash": "^4.17.11",
     "mocha": "^6.1.4",
     "mochawesome": "^4.0.1",
     "puppeteer": "^1.18.1"

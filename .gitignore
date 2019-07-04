@@ -3,3 +3,6 @@ reports/
 errorScreenshots/
 node_modules/
 output/
+test/mocha.opts
+test/tests.config.json
+temp/

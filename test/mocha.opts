@@ -1,4 +1,0 @@
---timeout 300000
-    --exit
-    --reporter mochawesome
-    --reporter-options reportDir=./output,reportFilename=2019_07_02(12_50_05)

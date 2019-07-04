@@ -1,13 +1,14 @@
 const helper = require('../helper/helper.js');
 const script = require('../script/script');
-const config = require('../config/tests.config');
+const config = require('../temp/tests.config');
 const expect = require('chai').expect;
+const _ = require('lodash');
 const addContext = require('mochawesome/addContext');
 const EventEmitter = require('events').defaultMaxListeners = 50;
 
 let errors = [];
 
-describe('Test popup', function () {
+describe('Test popup', async function () {
 
   it(`should open ${config.instances} instances of popup`, async function() {
 
@@ -17,6 +18,11 @@ describe('Test popup', function () {
       }
 
       let results = await Promise.all(promises);
+
+// console.log('\nbefore sort:', JSON.stringify(results, null, 2));
+        // put failed tests before passed ones
+      results = _.sortBy(results, [(test) => { return test.error }]);
+console.log('\nafter sort:', JSON.stringify(results, null, 2));
 
       // attach screens      
       results.forEach(test => {
