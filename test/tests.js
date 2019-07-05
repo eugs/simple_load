@@ -6,9 +6,9 @@ const _ = require('lodash');
 const addContext = require('mochawesome/addContext');
 const EventEmitter = require('events').defaultMaxListeners = 50;
 
-let errors = [];
 
 describe('Test popup', async function () {
+  let errors = [];
 
   it(`should open ${config.instances} instances of popup`, async function() {
 
@@ -19,27 +19,26 @@ describe('Test popup', async function () {
 
       let results = await Promise.all(promises);
 
-// console.log('\nbefore sort:', JSON.stringify(results, null, 2));
         // put failed tests before passed ones
       results = _.sortBy(results, [(test) => { return test.error }]);
-console.log('\nafter sort:', JSON.stringify(results, null, 2));
 
-      // attach screens      
+        // attach screenshots      
       results.forEach(test => {
-        console.log('add context for path:', test.index);
-        addContext(this, test.screenshot);
+      console.log('add context for path:', test.index);
+      addContext(this, test.screenshot);
 
-        if((test.titleText) && (test.titleText !== 'Employment Law Daily')) {
-          test.error = `wrong title: ${test.titleText}`;
-        }
+        // just in case
+      if((test.titleText) && (test.titleText !== 'Employment Law Daily')) {
+        test.error = `Wrong title: ${test.titleText}`;
+      }
 
-        if(test.error) {
-          console.log('got error:', test.index)
-          errors.push( {i: test.index, err: test.error} );
-          addContext(this, {title: `ERROR (#${test.index})`, value: `${test.error}`});
-        } else {
-          addContext(this, {title: `#${test.index} OK`, value: `\t${test.time}`});
-        }
+      if(test.error) {
+        console.log('got error:', test.index)
+        errors.push( {i: test.index, err: test.error} );
+        addContext(this, {title: `ERROR (#${test.index})`, value: `${test.error}`});
+      } else {
+        addContext(this, {title: `#${test.index} OK`, value: `\t${test.time}`});
+      }
 
       });
 

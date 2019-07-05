@@ -1,28 +1,44 @@
 const gulp = require('gulp');
 const mocha = require('gulp-mocha');
 const fsx = require('fs-extra');
-const args = require('yargs').argv;
 const OUTPUT_DIR = './output';
-// const OPTS_PATH = './temp/mocha.opts';
-const CONFIG_PATH = './temp/tests.config.json';
-const creds = require('./temp/creds');
-const env = (args.env) ? args.env : 'dev';
+const TEMP_DIR = './temp';
 
 gulp.task('test', init);
 
 gulp.task('url', setURL);
 
   async function setURL() {
-    console.log('set URL called');
+    const args = require('./config/options.url').args.help().argv;
+    const newURL = args.url;
+    const env = args.env;
 
+    fsx.ensureDir(TEMP_DIR);
+    const credsPath = (`${TEMP_DIR}/creds.json`);
+    fsx.ensureFileSync(credsPath);
+    let creds = fsx.readJsonSync(credsPath, { throws: false });
+    
+    creds = (!creds) ? {} : creds; 
+      
+    console.log(`env: ${env}\nURL: '${creds[env]}'\nwill be replaced with:\n'${newURL}'`);
+    creds[env] = newURL;
+
+    console.log(`\nupdated file: ${credsPath}\n`, creds);
+    // fsx.writeJsonSync(`${TEMP_DIR}/creds.json`, JSON.stringify(creds, null, 4));
+    fsx.writeFileSync(`${TEMP_DIR}/creds.json`, JSON.stringify(creds, null, 4));
+    
   }
-
+  
   async function init() {
-    const instances = (args.instances) ? args.instances : 20;
-    const headless = (args.headless) ? args.headless : true;
-    const timeout = (args.timeout) ? args.timeout: 30000;
-    const env = (args.env) ? args.env : 'dev';
+    const args = require('./config/options.test').args.help().argv;
+    let instances = args.instances,
+        headless = args.headless,
+        timeout = args.timeout,
+        env = args.env;
 
+    const CONFIG_PATH = `${TEMP_DIR}/tests.config.json`;
+    const creds = require(`${TEMP_DIR}/creds`);
+    
     console.log('test called:', args);
 
     let date = new Date().toISOString();
@@ -53,7 +69,7 @@ gulp.task('url', setURL);
     }
 
     console.log('\ntestsConfig', testsConfig);
-    fsx.writeJsonSync(CONFIG_PATH, testsConfig);
+    fsx.writeFileSync(CONFIG_PATH, JSON.stringify(testsConfig, null, 4));
 
     return gulp.src('test/*.js', { read: false })
       .pipe(mocha(mochaOpts))
