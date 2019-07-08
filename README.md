@@ -4,7 +4,7 @@ Opens specified number of browser instances (Chromium)
 ## Installation
 Clone this repo and use npm to install all dependencies 
 
-You should have at lease Node.js (8 version or higher)
+You should have at least Node.js (ver 8 or higher)
 
 <pre>
 npm install
@@ -12,7 +12,7 @@ npm install
 
 ## Usage
 
-First you have to specified URL to test. It will be stored in local json file and used for future runs
+First you need to specify URL to test. It will be stored in local json file and used for future runs
 
 <pre>
 gulp url [options]
