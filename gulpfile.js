@@ -32,7 +32,7 @@ gulp.task('url', setURL);
   async function init() {
     const args = require('./config/options.test').args.help().argv;
     let instances = args.instances,
-        headless = args.headless,
+        headless = !(args.show),
         timeout = args.timeout,
         env = args.env;
 

@@ -15,11 +15,11 @@ module.exports.args = require('yargs')
       default: 25
     },
 
-    'headless': {
-      alias: 'h',
-      describe: 'Set false if you want to see browser instances',
+    'show': {
+      alias: 's',
+      describe: 'Set true if you want to see browser instances',
       type: 'boolean',
-      default: true
+      default: false
     },
 
     'timeout': {
