@@ -24,7 +24,7 @@ const browserConfig = require('../config/browser.config');
       await page.goto(testsConfig.url);
 
       let title = await helper.getText(page, 'div.product-name');
-      await page.waitForSelector('div.topics-column');
+      await page.waitForSelector('div.topics');
       await page.waitForFunction("document.querySelector('div.topic') && document.querySelector('div.topic').clientHeight != 0");
       
       const time = perf.stop();

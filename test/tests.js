@@ -28,7 +28,8 @@ describe('Test popup', async function () {
       addContext(this, test.screenshot);
 
         // just in case
-      if((test.titleText) && (test.titleText !== 'Employment Law Daily')) {
+      // if((test.titleText) && (test.titleText !== 'Employment Law Daily')) {
+      if(!(test.titleText)) {
         test.error = `Wrong title: ${test.titleText}`;
       }
 
