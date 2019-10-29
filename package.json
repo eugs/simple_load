@@ -12,7 +12,7 @@
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
     "gulp-mocha": "^6.0.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "mocha": "^6.1.4",
     "mochawesome": "^4.0.1",
     "puppeteer": "^1.18.1",
